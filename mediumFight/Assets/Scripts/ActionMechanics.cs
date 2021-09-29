@@ -6,7 +6,14 @@ public class ActionMechanics : MonoBehaviour
 {
     public class NegativeState
     {
+        // A NegativeState is any state that will generally
+        // prevent the player from using an input to take action.
+        // This refers to hitstun, blockstun, and even the
+        // input-lockout portion of an attack animation that the
+        // player activates.
+
         public int frames;
+        // How long will this NegativeState last?
 
         public int atkLevel;
         // This like attack levels in guilty gear.
@@ -67,6 +74,11 @@ public class ActionMechanics : MonoBehaviour
         {
             return elapsed > floorBounce ? false : true;
         }
+    }
+
+    public class AttackLock : NegativeState
+    {
+
     }
 
     public class Hitstop

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PPlayer : ActionMechanics
 {
+    // This is the core player class that consolidates all the scripts
+    // required to make the player work.
+
     public int playerNumber = 0;
 
     public PInput pInput;

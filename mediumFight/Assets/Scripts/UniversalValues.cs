@@ -9,6 +9,10 @@ public class UniversalValues : MonoBehaviour
     // referred to but should never be placed into
     // a scene on its own.
 
+    // The purpose of this is to expose all relevant
+    // values in-editor to allow easy tweaking of
+    // values related to universal mechanics.
+
     [Header("Attack Levels")]
     public int[] blockStun;
     public int[] hitStun;

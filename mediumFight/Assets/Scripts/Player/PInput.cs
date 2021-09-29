@@ -5,6 +5,13 @@ using Rewired;
 
 public class PInput : PlayerInputsBase
 {
+    // This is the script used to handle all player input.
+    // NO OTHER SCRIPT SHOULD BE DIRECTLY ACCEPTING PLAYER INPUTS.
+
+    // For player action controls, all scripts should 
+    // reference this script to see what inputs have occurred or
+    // are currently occurring.
+
     protected Camera mainCamera;
     protected Player rewiredPlayer;
 
@@ -13,15 +20,30 @@ public class PInput : PlayerInputsBase
 
     protected override void CustomStart()
     {
-        SetMainCamera();
 
     }
 
-    protected void SetMainCamera()
+    protected bool SetMainCamera()
     {
+        // This looks for the main camera and returns true if it could be found. If the main camera can't be found,
+        // it returns false.
+
         if (mainCamera == null)
         {
-            mainCamera = Camera.main;
+            if (Camera.main != null)
+            {
+                mainCamera = Camera.main;
+                return true;
+            }
+            else
+            {
+                Debug.Log("PInput for player " + player.playerNumber.ToString() + " could not find the main camera.");
+                return false;
+            }
+        }
+        else
+        {
+            return true;
         }
     }
 
@@ -30,8 +52,7 @@ public class PInput : PlayerInputsBase
         //Debug.Log("PInput custom update has been called.");
 
         CheckRewiredPlayer();
-        SetMainCamera();
-        GetStickMovement();
+        GetStickMovement(SetMainCamera());
 
     }
 
@@ -48,8 +69,16 @@ public class PInput : PlayerInputsBase
         }
     }
 
-    public void GetStickMovement()
+    public void GetStickMovement(bool cam)
     {
+        // Player movement directions are ALWAYS based on camera orientation.
+
+        if (!cam)
+        {
+            Debug.Log("Because the main camera could not be found, camera-relative player movement cannot be calculated.");
+            return;
+        }
+
         // get flat normalized directions based on camera orientation
         Vector3 cameraForward = new Vector3(mainCamera.transform.forward.x, 0, mainCamera.transform.forward.z);
         Vector3 cameraRight = new Vector3(mainCamera.transform.right.x, 0, mainCamera.transform.right.z);

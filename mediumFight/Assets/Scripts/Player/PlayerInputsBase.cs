@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class PlayerInputsBase : MonoBehaviour
 {
+    // This is the base class from which all the individual
+    // player component scripts will be derived.
+
+    // This script pulls all the relevant information and
+    // variables from the core player script automatically,
+    // standardizing the lanugage that I use within these scripts.
+
     protected PPlayer player;
     protected PInput pInput;
     protected PMovement pMovement;
@@ -12,6 +19,7 @@ public class PlayerInputsBase : MonoBehaviour
 
     protected void Start()
     {
+        // Fetch all relevant pointers
         player = GetComponent<PPlayer>();
 
         pInput = player.pInput;
@@ -19,33 +27,37 @@ public class PlayerInputsBase : MonoBehaviour
         pAttacks = player.pAttacks;
         pAnim = player.pAnim;
 
-        DebugPrint(gameObject.ToString() + ": " + this.ToString() + " Start() has been called.");
+        Debug.Log(gameObject.ToString() + ": " + this.ToString() + " Start() has been called.");
 
+        // Run custom start code, if any
         CustomStart();
     }
 
     protected virtual void CustomStart()
     {
-
+        // Custom start code for the children if they need it
     }
 
     private void Update()
     {
+        // This is for testing only.
         if (player.negState == null)
         {
-            //DebugPrint("No negative state.");
+            //Debug.Log("No negative state.");
         }
 
+        // Run custom update code, if any
         CustomUpdate();
     }
 
     protected virtual void CustomUpdate()
     {
-
+        // Custom update code for the children if they need it
     }
 
-    protected virtual void DebugPrint(string message)
+    // IDK why I wrote this method when I can just use Debug.Log()
+    /*protected virtual void DebugPrint(string message)
     {
         Debug.Log(message);  
-    }
+    }*/
 }

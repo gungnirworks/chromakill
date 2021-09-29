@@ -5,22 +5,9 @@ using UnityEngine.UI;
 
 public class Camera2P : MonoBehaviour
 {
-    //public Transform[] targets;
+    // This is a 2P camera rig designed to track two individuals on the screen at once.
 
     public float centerLerpMagnitude = 5;
-    public float camLerpMagnitude = 5;
-    public float camExtraLerp = 1;
-    public float camExtraLerpMultiplicative = 10;
-    public float lookLerpMagnitude = 5;
-
-    public float camAnchorDefaultDistance = 2.25f;
-    public float camAnchorOffset = 0f;
-    public float camAnchorAdjustSpeed = 0.1f;
-
-    public float bigXRatio = 0.8f;
-    public float bigYRatio = 0.72f;
-    public float smallXRatio = 0.7f;
-    public float smallYRatio = 0.55f;
 
     public Transform[] pTransform;
     public Transform[] pLookTarget;
@@ -34,6 +21,26 @@ public class Camera2P : MonoBehaviour
     public Transform rigAnchor;
     public Transform rigTarget;
     public Transform camAnchor;
+
+
+    /*
+     * Everything here sucks, but it's saved for posterity. I'm not using this shit
+     * 
+     * public float camLerpMagnitude = 5;
+    public float camExtraLerp = 1;
+    public float camExtraLerpMultiplicative = 10;
+    public float lookLerpMagnitude = 5;
+
+    public float camAnchorDefaultDistance = 2.25f;
+    public float camAnchorOffset = 0f;
+    public float camAnchorAdjustSpeed = 0.1f;
+
+    public float bigXRatio = 0.8f;
+    public float bigYRatio = 0.72f;
+    public float smallXRatio = 0.7f;
+    public float smallYRatio = 0.55f;*/
+
+    //public Transform[] targets;
 
     private void Update()
     {
@@ -56,7 +63,7 @@ public class Camera2P : MonoBehaviour
     {
         Vector2 tempPos;
         Vector2[] screenPos = new Vector2[2];
-        bool shrinkOK = true;
+        //bool shrinkOK = true;
 
         for (int i = 0; i < pLookTarget.Length; i++)
         {
@@ -67,7 +74,7 @@ public class Camera2P : MonoBehaviour
             WriteScreenSpace(i, tempPos, screenPos[i]);
         }
 
-        // =============================== TRYING SHIT HERE =======================================================
+        // =============================== Everything here sucks, but it's saved for posterity. I'm not using this shit =======================================================
         /*
                 for (int i = 0; i < screenPos.Length; i++)
                 {
@@ -107,6 +114,8 @@ public class Camera2P : MonoBehaviour
                 camAnchor.localPosition = newCamAnchorPosition;
                 //Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, camAnchor.position, Time.deltaTime * camLerpMagnitude * camExtraLerp);
         */
+
+
         Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, camAnchor.position, 1);
         Vector3 lookTarget = Vector3.Lerp(pLookTarget[0].position, pLookTarget[1].position, 0.5f);
         Camera.main.transform.LookAt(lookTarget);
