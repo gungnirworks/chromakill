@@ -1,0 +1,76 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ActionMechanics : MonoBehaviour
+{
+    public class NegativeState
+    {
+        public int frames;
+
+        public int atkLevel;
+        // This like attack levels in guilty gear.
+        // This determines hit/blockstun and receiving animation.
+
+        public float knockbackMagnitude;
+        public Vector3 knockbackVector;
+        // This affects the target's movement
+
+        public float pushbackMagnitude;
+        // This affects the attacker's movement
+
+        public void DefaultKnockbacks()
+        {
+            knockbackMagnitude = 1;
+        }
+    }
+
+    public class Blockstun : NegativeState
+    {
+        public Blockstun(int fr, Vector3 vec, int hitstr, float kbm = 1, float pbm = 1)
+        {
+            frames = fr;
+            atkLevel = hitstr;
+            knockbackVector = vec;
+            knockbackMagnitude = kbm;
+            pushbackMagnitude = pbm;
+        }
+    }
+
+    public class Hitstun : NegativeState
+    {
+        public bool launch;
+
+        public Hitstun(bool ln, int fr, Vector3 vec, int hitstr, float kbm = 1, float pbm = 1, int wb = 0, int fb = 0)
+        {
+            launch = ln;
+            frames = fr;
+            atkLevel = hitstr;
+            knockbackVector = vec;
+            knockbackMagnitude = kbm;
+            pushbackMagnitude = pbm;
+
+            wallBounce = wb;
+            floorBounce = fb;
+        }
+
+        // on launch, attack levels no longer matter for hitstun.
+
+        public int wallBounce;
+        public int floorBounce;
+
+        public bool CanWallBounce(int elapsed)
+        {
+            return elapsed > wallBounce ? false : true;
+        }
+        public bool CanFloorBounce(int elapsed)
+        {
+            return elapsed > floorBounce ? false : true;
+        }
+    }
+
+    public class Hitstop
+    {
+        public int frames;
+    }
+}
