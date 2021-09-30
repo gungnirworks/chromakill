@@ -11,6 +11,9 @@ public class ActionMechanics : MonoBehaviour
         // This refers to hitstun, blockstun, and even the
         // input-lockout portion of an attack animation that the
         // player activates.
+        // This works because all of these states are mutually
+        // exclusive: You cannot be in blockstun AND hitstun,
+        // you cannot bee in blockstun while attacking, and so on.
 
         public int frames;
         // How long will this NegativeState last?

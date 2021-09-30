@@ -58,10 +58,22 @@ public class PInput : PlayerInputsBase
 
     protected void CheckRewiredPlayer()
     {
+        // Rewired is the best multi-controller input asset on the Unity Asset Store and I'll use it
+        // even for single-player games. It's one of the best assets ever released. Please use it, it's
+        // so great.
+
         if (rewiredPlayer == null)
         {
-            //Debug.Log("Rewired player for " + player.playerNumber.ToString() + " is null.");
-            rewiredPlayer = ReInput.players.GetPlayer(player.playerNumber);
+            // Fetch the ReInput player from rewired
+            if (ReInput.players.GetPlayer(player.playerNumber) != null)
+            {
+                rewiredPlayer = ReInput.players.GetPlayer(player.playerNumber);
+                Debug.Log("Rewired player for " + player.playerNumber.ToString() + " has been fetched.");
+            }
+            else
+            {
+                Debug.Log("Could not find Rewired player for " + player.playerNumber.ToString() + " in ReInput.");
+            }
         }
         else
         {
@@ -75,7 +87,7 @@ public class PInput : PlayerInputsBase
 
         if (!cam)
         {
-            Debug.Log("Because the main camera could not be found, camera-relative player movement cannot be calculated.");
+            Debug.Log("Because the main camera could not be found, camera-relative player movement for player " + player.playerNumber.ToString() + " cannot be calculated.");
             return;
         }
 
@@ -95,6 +107,7 @@ public class PInput : PlayerInputsBase
             movement = Vector3.zero;
         }
 
+        // Speed variables should be used in PMovement, not here.
         //movement = movement.normalized * SpeedVariables();
         //movement.y = 0f;
 

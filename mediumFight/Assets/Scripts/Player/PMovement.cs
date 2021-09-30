@@ -18,16 +18,23 @@ public class PMovement : PlayerInputsBase
 
     public float moveMagnitude = 1f;
 
+    private List<MoveAdd> moveAdds;
+    private Launch launch;
+    private Vector3 airMovement;
+
     private void FixedUpdate()
     {
-        if (!player.CheckNegative() && !player.pAttacks.CheckAttacks())
+        if (!player.CheckNegative())
         {
-            Move();
+            // If there is no NegativeState,
+            Move(Airborne());
         }
     }
 
-    private void Move()
+    private void Move(bool air)
     {
+        // This move method is used for intentional, player-input movement.
+
         if (pInput.movement != Vector3.zero)
         {
             //Debug.Log("movement is: " + pInput.movement.ToString());
@@ -38,6 +45,85 @@ public class PMovement : PlayerInputsBase
         else
         {
             pAnim.SetAnim("Running", false);
+        }
+    }
+
+    private bool Airborne()
+    {
+        // Check if the character is airborne.
+        // If yes, return true.
+        // If not, put the player on the ground and return false.
+
+        if (launch != null) return true;
+
+        airMovement = Vector3.zero;
+        return false;
+    }
+
+    public void StartLaunch()
+    {
+        // Use this to put the character into the air.
+
+        launch = null;
+    }
+
+    protected class Launch
+    {
+        public Vector3 initialDirection;
+        public int duration; // how many FixedUpdate cycles does this last?
+        public int elapsed = 1; // how many cycles has it been since it started?
+                                // it starts at elapsed = 1 because this is checked
+                                // only at the END of a movement.
+
+        public Launch(Vector3 dir, int dur = -1)
+        {
+            initialDirection = dir;
+            duration = dur < UniversalMechanics.instance.uValues.minimumLaunchTime ?
+                UniversalMechanics.instance.uValues.minimumLaunchTime : dur;
+        }
+    }
+
+    protected class MoveAdd
+    {
+        // This class contains data for additional movement enacted upon the player from
+        // other sources.
+
+        public Vector3 initialDirection; // the direction includes magnitude
+        public int duration; // how many FixedUpdate cycles does this last?
+        public bool decay; // does this MoveAdd decay over time?
+        public int elapsed = 1; // how many cycles has it been since it started?
+                                // it starts at elapsed = 1 because this is checked
+                                // only at the END of a movement.
+
+        public MoveAdd(Vector3 dir, int dur, bool dec = false)
+        {
+            initialDirection = dir;
+            duration = dur;
+            decay = dec;
+        }
+
+        public Vector3 AddDirection()
+        {
+            // this is the actual direction used to determine movement
+
+            if (!decay) return initialDirection;
+
+            float proportion = 1 - (elapsed / duration);
+            return initialDirection * proportion;
+        }
+
+        public bool CheckEnd()
+        {
+            // At the end of movement, check only ONCE to see if it's finished.
+            if (elapsed >= duration)
+            {
+                return true;
+            }
+            else
+            {
+                elapsed++;
+                return false;
+            }
         }
     }
 }

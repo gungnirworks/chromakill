@@ -16,21 +16,68 @@ public class PlayerInputsBase : MonoBehaviour
     protected PMovement pMovement;
     protected PAttacks pAttacks;
     protected PAnim pAnim;
+    protected UniversalMechanics uMech;
 
     protected void Start()
     {
-        // Fetch all relevant pointers
-        player = GetComponent<PPlayer>();
-
-        pInput = player.pInput;
-        pMovement = player.pMovement;
-        pAttacks = player.pAttacks;
-        pAnim = player.pAnim;
-
         Debug.Log(gameObject.ToString() + ": " + this.ToString() + " Start() has been called.");
+
+        // Fetch all relevant pointers
+        if (!FetchScripts())
+        {
+            Debug.Log(gameObject.ToString() + ": " + this.ToString() + " could not be fully initialized due to missing components.");
+        }
 
         // Run custom start code, if any
         CustomStart();
+    }
+
+    protected bool FetchScripts()
+    {
+        if (GetComponent<PPlayer>() == null)
+        {
+            Debug.Log(gameObject.ToString() + ": " + this.ToString() + " could not find PPlayer component.");
+            return false;
+        }
+        player = GetComponent<PPlayer>();
+
+        if (player.pInput == null)
+        {
+            Debug.Log(gameObject.ToString() + ": " + this.ToString() + " could not find PInput component.");
+            return false;
+        }
+        pInput = player.pInput;
+
+
+        if (player.pMovement == null)
+        {
+            Debug.Log(gameObject.ToString() + ": " + this.ToString() + " could not find PMovement component.");
+            return false;
+        }
+        pMovement = player.pMovement;
+
+        if (player.pAttacks == null)
+        {
+            Debug.Log(gameObject.ToString() + ": " + this.ToString() + " could not find PAttacks component.");
+            return false;
+        }
+        pAttacks = player.pAttacks;
+
+        if (player.pAnim == null)
+        {
+            Debug.Log(gameObject.ToString() + ": " + this.ToString() + " could not find PAnim component.");
+            return false;
+        }
+        pAnim = player.pAnim;
+
+        if (UniversalMechanics.instance == null)
+        {
+            Debug.Log(gameObject.ToString() + ": " + this.ToString() + " could not find UniversalMechanics instance.");
+            return false;
+        }
+        uMech = UniversalMechanics.instance;
+
+        return true;
     }
 
     protected virtual void CustomStart()

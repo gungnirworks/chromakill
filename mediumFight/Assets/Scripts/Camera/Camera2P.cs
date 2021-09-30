@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Camera2P : MonoBehaviour
 {
-    // This is a 2P camera rig designed to track two individuals on the screen at once.
+    // This is a 2P camera rig designed to track two individual targets on the screen at once.
 
     public float centerLerpMagnitude = 5;
 
