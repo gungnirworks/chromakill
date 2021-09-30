@@ -8,7 +8,7 @@ public class PMovement : PlayerInputsBase
     // HOWEVER, this script should never directly poll for player inputs. This script should
     // only refer to PInput and PPlayer to determine inputs and player state and make the
     // proper movements as are relevant.
-
+    //
     // THIS GAME DOES NOT USE UNITY PHYSICS FOR MOVEMENT AND ATTACKS. All movement should
     // be deliberately designed to function the way I want in a controlled manner.
     // For that reason,
@@ -91,9 +91,8 @@ public class PMovement : PlayerInputsBase
         public Vector3 initialDirection; // the direction includes magnitude
         public int duration; // how many FixedUpdate cycles does this last?
         public bool decay; // does this MoveAdd decay over time?
-        public int elapsed = 1; // how many cycles has it been since it started?
-                                // it starts at elapsed = 1 because this is checked
-                                // only at the END of a movement.
+        public int elapsed = 0; // how many cycles has it been since it started?
+                                // elapsed is checked only at the END of a movement.
 
         public MoveAdd(Vector3 dir, int dur, bool dec = false)
         {
@@ -114,6 +113,8 @@ public class PMovement : PlayerInputsBase
 
         public bool CheckEnd()
         {
+            elapsed++;
+
             // At the end of movement, check only ONCE to see if it's finished.
             if (elapsed >= duration)
             {
@@ -121,7 +122,6 @@ public class PMovement : PlayerInputsBase
             }
             else
             {
-                elapsed++;
                 return false;
             }
         }

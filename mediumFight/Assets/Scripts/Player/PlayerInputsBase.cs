@@ -6,7 +6,7 @@ public class PlayerInputsBase : MonoBehaviour
 {
     // This is the base class from which all the individual
     // player component scripts will be derived.
-
+    //
     // This script pulls all the relevant information and
     // variables from the core player script automatically,
     // standardizing the lanugage that I use within these scripts.
