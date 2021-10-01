@@ -90,7 +90,7 @@ namespace PInputsBase
         private void Update()
         {
             // This is for testing only.
-            if (player.negState == null)
+            if (player.NegState == null)
             {
                 //Debug.Log("No negative state.");
             }

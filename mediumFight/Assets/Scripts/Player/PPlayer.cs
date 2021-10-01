@@ -15,34 +15,34 @@ public class PPlayer : ActionMechanics
     public PAttacks pAttacks;
     public PAnim pAnim;
 
-    public NegativeState negState;
-    public Hitstop hitstop = null;
+    public NegativeState NegState { get; set; }
+    public Hitstop HStop { get; set; }
 
     public void ClearNegative()
     {
-        negState = null;
+        NegState = null;
     }
 
     public bool CheckNegative()
     {
         // is there a negative state on the player?
-        return negState == null ? false : true;
+        return NegState == null ? false : true;
     }
 
     public void ResetState()
     {
-        negState = null;
+        NegState = null;
         StopAllCoroutines();
     }
 
     public void NegativeInterrupt(NegativeState state)
     {
         ResetState();
-        negState = state;
+        NegState = state;
 
-        if (negState is Hitstun)
+        if (NegState is Hitstun)
         {
-            Hitstun hitstun = negState as Hitstun;
+            Hitstun hitstun = NegState as Hitstun;
             GetHit(hitstun);
         }
     }
