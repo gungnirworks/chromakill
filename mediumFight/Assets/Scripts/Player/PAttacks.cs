@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
+using PInputsBase;
 
 public class PAttacks : PlayerInputsBase
 {

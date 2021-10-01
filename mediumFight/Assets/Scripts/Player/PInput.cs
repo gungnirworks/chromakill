@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
+using PInputsBase;
 
 public class PInput : PlayerInputsBase
 {
@@ -18,9 +19,12 @@ public class PInput : PlayerInputsBase
     [HideInInspector] public Vector3 movement;
     [HideInInspector] public Vector3 lastDirection;
 
+
+    public InputBuffer inputBuffer;
+
     protected override void CustomStart()
     {
-
+        inputBuffer = new InputBuffer(player.playerNumber);
     }
 
     protected bool SetMainCamera()
@@ -125,147 +129,6 @@ public class PInput : PlayerInputsBase
 
         // do upkeep on the input buffer at THE END of fixedupdate.
         inputBuffer.BufferProgression();
-    }
-
-    //========================================[[       INPUT BUFFER      ]]===================================================
-
-    protected InputBuffer inputBuffer;
-
-    public class BufferElement
-    {
-        public int buttonPress; // which button was pushed
-        public int checkType;   // which check are we looking for?
-                                //      0 == press
-                                //      1 == hold
-                                //      2 == release
-        public bool easy;       // was this button held for easy input?
-        public int elapsed;
-
-        public BufferElement(int bp, int t)
-        {
-            buttonPress = bp;
-            checkType = t;
-            easy = checkType == 1 ? true : false;
-            elapsed = 0;
-        }
-    }
-
-    public class InputBuffer
-    {
-        public List<BufferElement> elements;
-        public UniversalMechanics UM;
-        public int playerNumber;
-
-        public InputBuffer(int pn)
-        {
-            elements = new List<BufferElement>();
-            UM = UniversalMechanics.instance;
-            playerNumber = pn;
-        }
-
-        public void BufferProgression()
-        {
-            if (elements.Count < 1)
-            {
-                //Debug.Log("Input buffer for player " + playerNumber.ToString() + " is empty.");
-                return;
-            }
-
-            // Check elapsed time:
-            foreach (BufferElement element in elements)
-            {
-                if (element != null)
-                {
-                    if (element.elapsed > UM.uValues.bufferWindow &&
-                        element.checkType != 1)
-                    {
-                        // only time out buffer elements if they aren't hold
-                        elements.Remove(element);
-                    }
-                    else if (element.elapsed > UM.uValues.easyInput &&
-                        element.checkType == 1)
-                    {
-                        // hold is only removed when the button release is added
-                        element.easy = false;
-                    }
-                    element.elapsed++;
-                }
-            }
-
-            // Clean up:
-            foreach (BufferElement element in elements)
-            {
-                if (element == null)
-                {
-                    elements.Remove(element);
-                }
-            }
-        }
-
-        public void ResetBuffer()
-        {
-            elements = new List<BufferElement>();
-        }
-        
-        public void Add(BufferElement element)
-        {
-            bool inputAlreadyExists = false;
-
-            for (int i = 0; i < elements.Count; i++)
-            {
-                // iterate through the buffer and check each one
-                // to see if an identical element already exists.
-
-                if (elements[i].checkType == element.checkType)
-                {
-                    if (element.checkType == 1)
-                    {
-                        // the held button is already there.
-                        inputAlreadyExists = true;
-                    }
-                    else
-                    {
-                        if (elements[i].elapsed < 1)
-                        {
-                            // the same input already exists.
-                            inputAlreadyExists = true;
-                        }
-                    }
-                }
-            }
-
-            if (inputAlreadyExists) return;
-
-            elements.Add(element);
-
-            /*switch (element.checkType)
-            {
-                case 0: // press
-                    {
-                    }
-                    break;
-                case 1: // hold
-                    {
-                    }
-                    break;
-                case 2: // release
-                    {
-                    }
-                    break;
-            }*/
-        }
-
-        public void RemoveHold(int button)
-        {
-            foreach (BufferElement element in elements)
-            {
-                if (element.buttonPress == button &&
-                    element.checkType == 1)
-                {
-                    elements.Remove(element);
-                }
-            }
-        }
     }
 
     //==================================================[[       INPUT HANDLING      ]]===================================================

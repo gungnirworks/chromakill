@@ -7,20 +7,25 @@ public class Camera2P : MonoBehaviour
 {
     // This is a 2P camera rig designed to track two individual targets on the screen at once.
 
+    public bool debugOn = true;
+
     public float centerLerpMagnitude = 5;
 
     public Transform[] pTransform;
     public Transform[] pLookTarget;
 
-    public Text[] posText;
+    private Text[] posText;
 
     private Transform[] pScreenSpace;
 
-    public Text screenDebugDisplay;
+    private Text screenDebugDisplay;
+    private Text screenDebugTitle;
 
     public Transform rigAnchor;
     public Transform rigTarget;
     public Transform camAnchor;
+
+    private DebugScreenSpace debugSS;
 
 
     /*
@@ -41,6 +46,19 @@ public class Camera2P : MonoBehaviour
     public float smallYRatio = 0.55f;*/
 
     //public Transform[] targets;
+
+    private void Start()
+    {
+        FindDebugDisplay();
+    }
+
+    private void FindDebugDisplay()
+    {
+        debugSS = DebugScreenSpace.instance;
+        posText = debugSS.posText;
+        screenDebugDisplay = debugSS.screenDebugDisplay;
+        screenDebugTitle = debugSS.screenDebugTitle;
+    }
 
     private void Update()
     {
@@ -131,6 +149,26 @@ public class Camera2P : MonoBehaviour
 
     void WriteScreenSpace(int i, Vector2 tP, Vector2 sP)
     {
+        if (!debugOn)
+        {
+            foreach (Text text in posText)
+            {
+                text.gameObject.SetActive(false);
+            }
+            screenDebugDisplay.gameObject.SetActive(false);
+            screenDebugTitle.gameObject.SetActive(false);
+            return;
+        }
+        else
+        {
+            foreach (Text text in posText)
+            {
+                text.gameObject.SetActive(true);
+            }
+            screenDebugDisplay.gameObject.SetActive(true);
+            screenDebugTitle.gameObject.SetActive(true);
+        }
+
         screenDebugDisplay.text =
             "Height: " + Screen.height.ToString() +
             "\nWidth: " + Screen.width.ToString();
