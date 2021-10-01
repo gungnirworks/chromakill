@@ -17,23 +17,23 @@ namespace ActionMech
             // exclusive: You cannot be in blockstun AND hitstun,
             // you cannot bee in blockstun while attacking, and so on.
 
-            public int frames;
+            public int Frames { get; set; }
             // How long will this NegativeState last?
 
-            public int atkLevel;
+            public int AtkLevel { get; set; }
             // This like attack levels in guilty gear.
             // This determines hit/blockstun and receiving animation.
 
-            public float knockbackMagnitude;
-            public Vector3 knockbackVector;
+            public float KnockbackMagnitude { get; set; }
+            public Vector3 KnockbackVector { get; set; }
             // This affects the target's movement
 
-            public float pushbackMagnitude;
+            public float PushbackMagnitude { get; set; }
             // This affects the attacker's movement
 
             public void DefaultKnockbacks()
             {
-                knockbackMagnitude = 1;
+                KnockbackMagnitude = 1;
             }
         }
 
@@ -41,43 +41,43 @@ namespace ActionMech
         {
             public Blockstun(int fr, Vector3 vec, int hitstr, float kbm = 1, float pbm = 1)
             {
-                frames = fr;
-                atkLevel = hitstr;
-                knockbackVector = vec;
-                knockbackMagnitude = kbm;
-                pushbackMagnitude = pbm;
+                Frames = fr;
+                AtkLevel = hitstr;
+                KnockbackVector = vec;
+                KnockbackMagnitude = kbm;
+                PushbackMagnitude = pbm;
             }
         }
 
         public class Hitstun : NegativeState
         {
-            public bool launch;
+            public bool Launch { get; set; }
 
             public Hitstun(bool ln, int fr, Vector3 vec, int hitstr, float kbm = 1, float pbm = 1, int wb = 0, int fb = 0)
             {
-                launch = ln;
-                frames = fr;
-                atkLevel = hitstr;
-                knockbackVector = vec;
-                knockbackMagnitude = kbm;
-                pushbackMagnitude = pbm;
+                Launch = ln;
+                Frames = fr;
+                AtkLevel = hitstr;
+                KnockbackVector = vec;
+                KnockbackMagnitude = kbm;
+                PushbackMagnitude = pbm;
 
-                wallBounce = wb;
-                floorBounce = fb;
+                WallBounce = wb;
+                FloorBounce = fb;
             }
 
             // on launch, attack levels no longer matter for hitstun.
 
-            public int wallBounce;
-            public int floorBounce;
+            public int WallBounce { get; set; }
+            public int FloorBounce { get; set; }
 
             public bool CanWallBounce(int elapsed)
             {
-                return elapsed > wallBounce ? false : true;
+                return elapsed > WallBounce ? false : true;
             }
             public bool CanFloorBounce(int elapsed)
             {
-                return elapsed > floorBounce ? false : true;
+                return elapsed > FloorBounce ? false : true;
             }
         }
 

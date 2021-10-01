@@ -8,7 +8,7 @@ public class PPlayer : ActionMechanics
     // This is the core player class that consolidates all the scripts
     // required to make the player work.
 
-    public int playerNumber = 0;
+    public int PlayerNumber { get; set; }
 
     public PInput pInput;
     public PMovement pMovement;
@@ -49,7 +49,7 @@ public class PPlayer : ActionMechanics
 
     void GetHit(Hitstun hitstun)
     {
-        if (hitstun.launch)
+        if (hitstun.Launch)
         {
         }
     }

@@ -24,7 +24,7 @@ public class PInput : PlayerInputsBase
 
     protected override void CustomStart()
     {
-        inputBuffer = new InputBuffer(player.playerNumber);
+        inputBuffer = new InputBuffer(player.PlayerNumber);
     }
 
     protected bool SetMainCamera()
@@ -41,7 +41,7 @@ public class PInput : PlayerInputsBase
             }
             else
             {
-                Debug.Log("PInput for player " + player.playerNumber.ToString() + " could not find the main camera.");
+                Debug.Log("PInput for player " + player.PlayerNumber.ToString() + " could not find the main camera.");
                 return false;
             }
         }
@@ -60,14 +60,14 @@ public class PInput : PlayerInputsBase
         if (rewiredPlayer == null)
         {
             // Fetch the ReInput player from rewired
-            if (ReInput.players.GetPlayer(player.playerNumber) != null)
+            if (ReInput.players.GetPlayer(player.PlayerNumber) != null)
             {
-                rewiredPlayer = ReInput.players.GetPlayer(player.playerNumber);
-                Debug.Log("Rewired player for " + player.playerNumber.ToString() + " has been fetched.");
+                rewiredPlayer = ReInput.players.GetPlayer(player.PlayerNumber);
+                Debug.Log("Rewired player for " + player.PlayerNumber.ToString() + " has been fetched.");
             }
             else
             {
-                Debug.Log("Could not find Rewired player for " + player.playerNumber.ToString() + " in ReInput.");
+                Debug.Log("Could not find Rewired player for " + player.PlayerNumber.ToString() + " in ReInput.");
             }
         }
         else
@@ -82,7 +82,7 @@ public class PInput : PlayerInputsBase
 
         if (!cam)
         {
-            Debug.Log("Because the main camera could not be found, camera-relative player movement for player " + player.playerNumber.ToString() + " cannot be calculated.");
+            Debug.Log("Because the main camera could not be found, camera-relative player movement for player " + player.PlayerNumber.ToString() + " cannot be calculated.");
             return;
         }
 
@@ -138,13 +138,13 @@ public class PInput : PlayerInputsBase
         // initialize a temporary check bool
         bool inputFound = false;
 
-        for (int i = 0; i < inputBuffer.elements.Count; i++)
+        for (int i = 0; i < inputBuffer.Elements.Count; i++)
         {
             if (checkType != 0)
             {
                 // if we're not looking for a press, the check is simple
-                if (inputBuffer.elements[i].buttonPress == button &&
-                    inputBuffer.elements[i].checkType == checkType)
+                if (inputBuffer.Elements[i].ButtonPress == button &&
+                    inputBuffer.Elements[i].CheckType == checkType)
                 {
                     inputFound = true;
                 }
@@ -152,7 +152,7 @@ public class PInput : PlayerInputsBase
             else
             {
                 // if we're looking for a press, we need to also check if easy input was used
-                if (inputBuffer.elements[i].checkType == 0 || inputBuffer.elements[i].easy)
+                if (inputBuffer.Elements[i].CheckType == 0 || inputBuffer.Elements[i].Easy)
                 {
                     inputFound = true;
                 }
@@ -160,8 +160,8 @@ public class PInput : PlayerInputsBase
 
             if (inputFound) // if true
             {
-                ReportButtonPress(inputBuffer.elements[i]);
-                inputBuffer.elements.RemoveAt(i);
+                ReportButtonPress(inputBuffer.Elements[i]);
+                inputBuffer.Elements.RemoveAt(i);
                 return inputFound; // return true
             }
         }
@@ -176,13 +176,13 @@ public class PInput : PlayerInputsBase
 
     protected void UpdateInputBuffer()
     {
-        if (inputBuffer == null) inputBuffer = new InputBuffer(player.playerNumber);
+        if (inputBuffer == null) inputBuffer = new InputBuffer(player.PlayerNumber);
 
         // get player inputs and add them to the buffer
 
         if (rewiredPlayer.GetButtonDown("Jump"))
         {
-            inputBuffer.elements.Add(new BufferElement(0,0));
+            inputBuffer.Elements.Add(new BufferElement(0,0));
         }
     }
 }

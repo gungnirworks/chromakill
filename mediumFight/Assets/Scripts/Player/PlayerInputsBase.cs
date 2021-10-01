@@ -103,110 +103,103 @@ namespace PInputsBase
         {
             // Custom update code for the children if they need it
         }
-
-        // IDK why I wrote this method when I can just use Debug.Log()
-        /*protected virtual void DebugPrint(string message)
-        {
-            Debug.Log(message);  
-        }*/
-
     }
 
     public class BufferElement
     {
-        public int buttonPress; // which button was pushed
-        public int checkType;   // which check are we looking for?
-                                //      0 == press
-                                //      1 == hold
-                                //      2 == release
-        public bool easy;       // was this button held for easy input?
-        public int elapsed;
+        public int ButtonPress { get; set; } // which button was pushed
+        public int CheckType { get; set; }   // which check are we looking for?
+                                                //      0 == press
+                                                //      1 == hold
+                                                //      2 == release
+        public bool Easy { get; set; }       // was this button held for easy input?
+        public int Elapsed { get; set; }
 
         public BufferElement(int bp, int t)
         {
-            buttonPress = bp;
-            checkType = t;
-            easy = checkType == 1 ? true : false;
-            elapsed = 0;
+            ButtonPress = bp;
+            CheckType = t;
+            Easy = CheckType == 1 ? true : false;
+            Elapsed = 0;
         }
     }
 
     public class InputBuffer
     {
-        public List<BufferElement> elements;
-        public UniversalMechanics UM;
-        public int playerNumber;
+        public List<BufferElement> Elements { get; set; }
+        public readonly UniversalMechanics UM;
+        public int PlayerNumber { get; set; }
 
         public InputBuffer(int pn)
         {
-            elements = new List<BufferElement>();
+            Elements = new List<BufferElement>();
             UM = UniversalMechanics.instance;
-            playerNumber = pn;
+            PlayerNumber = pn;
         }
 
         public void BufferProgression()
         {
-            if (elements.Count < 1)
+            if (Elements.Count < 1)
             {
                 //Debug.Log("Input buffer for player " + playerNumber.ToString() + " is empty.");
                 return;
             }
 
             // Check elapsed time:
-            foreach (BufferElement element in elements)
+            foreach (BufferElement element in Elements)
             {
                 if (element != null)
                 {
-                    if (element.elapsed > UM.uValues.bufferWindow &&
-                        element.checkType != 1)
+                    if (element.Elapsed > UM.uValues.bufferWindow &&
+                        element.CheckType != 1)
                     {
                         // only time out buffer elements if they aren't hold
-                        elements.Remove(element);
+                        Elements.Remove(element);
                     }
-                    else if (element.elapsed > UM.uValues.easyInput &&
-                        element.checkType == 1)
+                    else if (element.Elapsed > UM.uValues.easyInput &&
+                        element.CheckType == 1)
                     {
                         // hold is only removed when the button release is added
-                        element.easy = false;
+                        element.Easy = false;
                     }
-                    element.elapsed++;
+                    element.Elapsed++;
                 }
             }
 
             // Clean up:
-            foreach (BufferElement element in elements)
+            foreach (BufferElement element in Elements)
             {
                 if (element == null)
                 {
-                    elements.Remove(element);
+                    Elements.Remove(element);
                 }
             }
         }
 
         public void ResetBuffer()
         {
-            elements = new List<BufferElement>();
+            Elements = new List<BufferElement>();
         }
 
         public void Add(BufferElement element)
         {
             bool inputAlreadyExists = false;
 
-            for (int i = 0; i < elements.Count; i++)
+            for (int i = 0; i < Elements.Count; i++)
             {
                 // iterate through the buffer and check each one
                 // to see if an identical element already exists.
 
-                if (elements[i].checkType == element.checkType)
+                if (Elements[i].CheckType == element.CheckType)
                 {
-                    if (element.checkType == 1)
+                    if (element.CheckType == 1)
                     {
                         // the held button is already there.
                         inputAlreadyExists = true;
                     }
                     else
                     {
-                        if (elements[i].elapsed < 1)
+                        if (Elements[i].Elapsed < 1)
                         {
                             // the same input already exists.
                             inputAlreadyExists = true;
@@ -217,7 +210,7 @@ namespace PInputsBase
 
             if (inputAlreadyExists) return;
 
-            elements.Add(element);
+            Elements.Add(element);
 
             /*switch (element.checkType)
             {
@@ -238,12 +231,12 @@ namespace PInputsBase
 
         public void RemoveHold(int button)
         {
-            foreach (BufferElement element in elements)
+            foreach (BufferElement element in Elements)
             {
-                if (element.buttonPress == button &&
-                    element.checkType == 1)
+                if (element.ButtonPress == button &&
+                    element.CheckType == 1)
                 {
-                    elements.Remove(element);
+                    Elements.Remove(element);
                 }
             }
         }

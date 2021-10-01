@@ -53,7 +53,7 @@ public class DebugInputBuffer : MonoBehaviour
 
         foreach(GameObject player in playerObjects)
         {
-            if (player.GetComponent<PPlayer>().playerNumber == targetPlayer)
+            if (player.GetComponent<PPlayer>().PlayerNumber == targetPlayer)
             {
                 return player.GetComponent<PPlayer>();
             }
@@ -86,7 +86,7 @@ public class DebugInputBuffer : MonoBehaviour
 
         // draw the buffer
 
-        if (inputBuffer == null || inputBuffer.elements.Count < 1)
+        if (inputBuffer == null || inputBuffer.Elements.Count < 1)
         {
             ResetBuffer();
         }
