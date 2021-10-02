@@ -16,8 +16,17 @@ public class PInput : PlayerInputsBase
     protected Camera mainCamera;
     protected Player rewiredPlayer;
 
-    [HideInInspector] public Vector3 movement;
-    [HideInInspector] public Vector3 lastDirection;
+    public Player RewiredPlayer
+    {
+        get
+        {
+            return rewiredPlayer;
+        }
+        set { }
+    }
+
+    [HideInInspector] public Vector3 Movement { get; set; }
+    [HideInInspector] public Vector3 LastDirection { get; set; }
 
 
     public InputBuffer inputBuffer;
@@ -92,23 +101,23 @@ public class PInput : PlayerInputsBase
         // Convert axis input into movement based on directions relative to the main camera's direction
         if (!player.CheckNegative())
         {
-            movement = (rewiredPlayer.GetAxis("HMove") * cameraRight) + (rewiredPlayer.GetAxis("VMove") * cameraForward);
-
+            Movement = (rewiredPlayer.GetAxis("HMove") * cameraRight) + (rewiredPlayer.GetAxis("VMove") * cameraForward);
+            Movement = Vector3.ClampMagnitude(Movement, 1);
             /*Debug.Log("HMove: " + rewiredPlayer.GetAxis("HMove").ToString());
             Debug.Log("VMove: " + rewiredPlayer.GetAxis("VMove").ToString());*/
         }
         else
         {
-            movement = Vector3.zero;
+            Movement = Vector3.zero;
         }
 
         // Speed variables should be used in PMovement, not here.
         //movement = movement.normalized * SpeedVariables();
         //movement.y = 0f;
 
-        if (movement != Vector3.zero)
+        if (Movement != Vector3.zero)
         {
-            lastDirection = movement;
+            LastDirection = Movement;
         }
 
     }
@@ -180,9 +189,109 @@ public class PInput : PlayerInputsBase
 
         // get player inputs and add them to the buffer
 
-        if (rewiredPlayer.GetButtonDown("Jump"))
+        // ========================================[[ JUMP ]]
+
+        if (rewiredPlayer.GetButtonDown("Jump")) // press
         {
-            inputBuffer.Elements.Add(new BufferElement(0,0));
+            Debug.Log("Jumping");
+            inputBuffer.Add(new BufferElement(0, 0));
         }
+
+        if (rewiredPlayer.GetButton("Jump")) // hold
+        {
+            inputBuffer.Add(new BufferElement(0, 1));
+        }
+
+        if (rewiredPlayer.GetButtonUp("Jump")) // release
+        {
+            inputBuffer.Add(new BufferElement(0, 2));
+        }
+
+        // ========================================[[ QAtk ]]
+
+        if (rewiredPlayer.GetButtonDown("QAtk")) // press
+        {
+            inputBuffer.Add(new BufferElement(1, 0));
+        }
+
+        if (rewiredPlayer.GetButton("QAtk")) // hold
+        {
+            inputBuffer.Add(new BufferElement(1, 1));
+        }
+
+        if (rewiredPlayer.GetButtonUp("QAtk")) // release
+        {
+            inputBuffer.Add(new BufferElement(1, 2));
+        }
+
+        // ========================================[[ SAtk ]]
+
+        if (rewiredPlayer.GetButtonDown("SAtk")) // press
+        {
+            inputBuffer.Add(new BufferElement(2, 0));
+        }
+
+        if (rewiredPlayer.GetButton("SAtk")) // hold
+        {
+            inputBuffer.Add(new BufferElement(2, 1));
+        }
+
+        if (rewiredPlayer.GetButtonUp("SAtk")) // release
+        {
+            inputBuffer.Add(new BufferElement(2, 2));
+        }
+
+        // ========================================[[ Stance ]]
+
+        if (rewiredPlayer.GetButtonDown("Stance")) // press
+        {
+            inputBuffer.Add(new BufferElement(3, 0));
+        }
+
+        if (rewiredPlayer.GetButton("Stance")) // hold
+        {
+            inputBuffer.Add(new BufferElement(3, 1));
+        }
+
+        if (rewiredPlayer.GetButtonUp("Stance")) // release
+        {
+            inputBuffer.Add(new BufferElement(3, 2));
+        }
+
+        // ========================================[[ Dash ]]
+
+        if (rewiredPlayer.GetButtonDown("Dash")) // press
+        {
+            inputBuffer.Add(new BufferElement(4, 0));
+        }
+
+        if (rewiredPlayer.GetButton("Dash")) // hold
+        {
+            inputBuffer.Add(new BufferElement(4, 1));
+        }
+
+        if (rewiredPlayer.GetButtonUp("Dash")) // release
+        {
+            inputBuffer.Add(new BufferElement(4, 2));
+        }
+
+        // ========================================[[ Grab ]]
+
+        if (rewiredPlayer.GetButtonDown("Grab")) // press
+        {
+            inputBuffer.Add(new BufferElement(5, 0));
+        }
+
+        if (rewiredPlayer.GetButton("Grab")) // hold
+        {
+            inputBuffer.Add(new BufferElement(5, 1));
+        }
+
+        if (rewiredPlayer.GetButtonUp("Grab")) // release
+        {
+            inputBuffer.Add(new BufferElement(5, 2));
+        }
+
+        //Debug.Log("Input buffer length: " + inputBuffer.Elements.Count.ToString());
     }
 }

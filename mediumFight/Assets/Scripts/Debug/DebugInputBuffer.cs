@@ -4,25 +4,35 @@ using UnityEngine;
 using UnityEngine.UI;
 using PInputsBase;
 
+[RequireComponent(typeof(DebugInputDisplay))]
 public class DebugInputBuffer : MonoBehaviour
 {
     public static DebugInputBuffer instance;
+    private DebugInputDisplay inputDisplay;
 
-    public bool debugOn = true;
+    public Color[] checkTypeColors;
+    public Color[] internalColors;
+
+    public Image[] colorLegend;
 
     public GameObject bufferElementPrefab;
     public List<GameObject> bufferElements;
     public InputBuffer inputBuffer;
 
-    public int trackingPlayer = 0;
     public Text bufferTitle;
 
     public Transform offset;
+    public float xOffsetAmount = 10f;
 
     private void Awake()
     {
         instance = this;
         ResetBuffer();
+    }
+
+    private void Start()
+    {
+        inputDisplay = GetComponent<DebugInputDisplay>();
     }
 
     private void Update()
@@ -39,61 +49,80 @@ public class DebugInputBuffer : MonoBehaviour
             for (int i = bufferElements.Count -1; i > -1; i--)
             {
                 //Debug.Log("Destroying bufferElement at index: " + i.ToString());
-                Destroy(bufferElements[i]);
+                DestroyImmediate(bufferElements[i]);
+                //bufferElements.RemoveAt(i);
+            }
+        }
+
+        if (bufferElements != null && bufferElements.Count > 0)
+        {
+            //Debug.Log("bufferElements is both non-null and at count > 0");
+            for (int i = bufferElements.Count - 1; i > -1; i--)
+            {
+                if (bufferElements[i] == null)
                 bufferElements.RemoveAt(i);
             }
         }
         //bufferElements = new List<GameObject>();
-        inputBuffer = null;
-    }
-
-    private PPlayer Player(int targetPlayer)
-    {
-        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
-
-        foreach(GameObject player in playerObjects)
-        {
-            if (player.GetComponent<PPlayer>().PlayerNumber == targetPlayer)
-            {
-                return player.GetComponent<PPlayer>();
-            }
-        }
-
-        return null;
+        //inputBuffer = null;
     }
 
     private void DrawBuffer()
     {
-        if (!debugOn)
+        ResetBuffer();
+        if (!inputDisplay.debugOn)
         {
-            ResetBuffer();
             bufferTitle.gameObject.SetActive(false);
         }
         else
         {
-            if (Player(trackingPlayer) == null)
+            if (inputDisplay.Player(inputDisplay.TrackingPlayer) == null)
             {
-                Debug.Log("Debug Input Buffer could not track player: " + trackingPlayer.ToString());
+                Debug.Log("Debug Input Buffer could not track player: " + inputDisplay.TrackingPlayer.ToString());
                 return;
             }
 
             bufferTitle.gameObject.SetActive(true);
-            bufferTitle.text = "Input Buffer: Player " + trackingPlayer.ToString();
+            bufferTitle.text = "Input Buffer: Player " + inputDisplay.TrackingPlayer.ToString();
+
+            for (int i = 0; i < colorLegend.Length; i++)
+            {
+                if (i > 2)
+                {
+                    colorLegend[i].color = internalColors[1];
+                }
+                else
+                {
+                    colorLegend[i].color = checkTypeColors[i];
+                }
+            }
 
             // populate the buffer
-            inputBuffer = Player(trackingPlayer).pInput.inputBuffer;
+            inputBuffer = inputDisplay.Player(inputDisplay.TrackingPlayer).pInput.inputBuffer;
         }
 
         // draw the buffer
 
-        if (inputBuffer == null || inputBuffer.Elements.Count < 1)
+        /*if (inputBuffer == null || inputBuffer.Elements.Count < 1)
         {
             ResetBuffer();
-        }
+        }*/
 
-        for (int i = 0; i < bufferElements.Count; i++)
+        //ResetBuffer();
+
+        for (int i = 0; i < inputBuffer.Elements.Count; i++)
         {
+            //Vector3 newOffset = new Vector3(offset.position.x + xOffsetAmount * i, offset.position.y, offset.position.z);
+            GameObject newElement = Instantiate(bufferElementPrefab, offset);
+            newElement.transform.position = new Vector3(offset.position.x + xOffsetAmount * i, offset.position.y, offset.position.z);
+            bufferElements.Add(newElement);
 
+            DebugBufferElement bufferElement = newElement.GetComponent<DebugBufferElement>();
+            bufferElement.buttonValue.text = inputBuffer.Elements[i].ButtonPress.ToString();
+            bufferElement.elapsedText.text = inputBuffer.Elements[i].Elapsed.ToString();
+            bufferElement.border.color = checkTypeColors[inputBuffer.Elements[i].CheckType];
+            bufferElement.insideImage.color = inputBuffer.Elements[i].Easy ?
+                internalColors[1] : internalColors[0];
         }
     }
 }

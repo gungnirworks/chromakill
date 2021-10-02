@@ -7,5 +7,6 @@ public class DebugBufferElement : MonoBehaviour
 {
     public Text elapsedText;
     public Image border;
+    public Image insideImage;
     public Text buttonValue;
 }

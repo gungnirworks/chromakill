@@ -105,6 +105,8 @@ namespace PInputsBase
         }
     }
 
+    //==================================================[[       INPUT BUFFER      ]]===================================================
+
     public class BufferElement
     {
         public int ButtonPress { get; set; } // which button was pushed
@@ -146,23 +148,49 @@ namespace PInputsBase
             }
 
             // Check elapsed time:
-            foreach (BufferElement element in Elements)
+            //foreach (BufferElement element in Elements)
+            for (int i = 0; i < Elements.Count; i++)
             {
-                if (element != null)
+                bool elementRemoved = false;
+                // we might be removing elements from the buffer
+
+                if (i >= Elements.Count) break;
+                // because we're removing elements from the buffer, check
+                // to make sure we're still in range
+
+                if (Elements[i] != null)
                 {
-                    if (element.Elapsed > UM.uValues.bufferWindow &&
-                        element.CheckType != 1)
+                    if (Elements[i].Elapsed > UM.uValues.pressDuration &&
+                        Elements[i].CheckType == 0)
                     {
-                        // only time out buffer elements if they aren't hold
-                        Elements.Remove(element);
+                        // time out press elements
+                        Elements.Remove(Elements[i]);
+                        elementRemoved = true;
                     }
-                    else if (element.Elapsed > UM.uValues.easyInput &&
-                        element.CheckType == 1)
+                    else if (Elements[i].Elapsed > UM.uValues.bufferWindow &&
+                        Elements[i].CheckType == 2)
+                    {
+                        // time out release elements if they aren't held
+                        Elements.Remove(Elements[i]);
+                        elementRemoved = true;
+                    }
+                    else if (Elements[i].Elapsed > UM.uValues.easyInput &&
+                        Elements[i].CheckType == 1)
                     {
                         // hold is only removed when the button release is added
-                        element.Easy = false;
+                        Elements[i].Easy = false;
                     }
-                    element.Elapsed++;
+
+                    if (elementRemoved)
+                    { 
+                        i--;
+                        // if we removed an element, we're gonna use the same index again
+                    }
+                    else
+                    {
+                        Elements[i].Elapsed++;
+                        // if we didn't remove the element, increment the elapsed timer
+                    }
                 }
             }
 
@@ -184,17 +212,19 @@ namespace PInputsBase
         public void Add(BufferElement element)
         {
             bool inputAlreadyExists = false;
+            Debug.Log("Checking: " + element.ButtonPress.ToString() + " with checkType " + element.CheckType.ToString() + " for the input buffer.");
 
             for (int i = 0; i < Elements.Count; i++)
             {
                 // iterate through the buffer and check each one
                 // to see if an identical element already exists.
 
-                if (Elements[i].CheckType == element.CheckType)
+                if (Elements[i].ButtonPress == element.ButtonPress)
                 {
-                    if (element.CheckType == 1)
+                    if (Elements[i].CheckType == 1 && element.CheckType == 1)
                     {
                         // the held button is already there.
+                        Debug.Log("Held button " + element.ButtonPress.ToString() + " already exists in the buffer.");
                         inputAlreadyExists = true;
                     }
                     else
@@ -211,8 +241,9 @@ namespace PInputsBase
             if (inputAlreadyExists) return;
 
             Elements.Add(element);
+            Debug.Log("Adding: " + element.ButtonPress.ToString() + " with checkType " + element.CheckType.ToString() + " to input buffer.");
 
-            /*switch (element.checkType)
+            switch (element.CheckType)
             {
                 case 0: // press
                     {
@@ -224,9 +255,18 @@ namespace PInputsBase
                     break;
                 case 2: // release
                     {
+                        for (int i = 0; i < Elements.Count; i++)
+                        {
+                            if (Elements[i].ButtonPress == element.ButtonPress &&
+                                Elements[i].CheckType == 1) // if the button is being held, remove it because it's been released
+                            {
+                                Elements.RemoveAt(i);
+                                break;
+                            }
+                        }
                     }
                     break;
-            }*/
+            }
         }
 
         public void RemoveHold(int button)

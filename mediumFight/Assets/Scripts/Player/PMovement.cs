@@ -36,11 +36,11 @@ public class PMovement : PlayerInputsBase
     {
         // This move method is used for intentional, player-input movement.
 
-        if (pInput.movement != Vector3.zero)
+        if (pInput.Movement != Vector3.zero)
         {
             //Debug.Log("movement is: " + pInput.movement.ToString());
-            gameObject.transform.position += pInput.movement * moveMagnitude;
-            gameObject.transform.LookAt(transform.position + pInput.lastDirection, Vector3.up);
+            gameObject.transform.position += pInput.Movement * moveMagnitude;
+            gameObject.transform.LookAt(transform.position + pInput.LastDirection, Vector3.up);
             pAnim.SetAnim("Running", true);
         }
         else
