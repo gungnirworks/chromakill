@@ -87,9 +87,13 @@ public class DebugInputBuffer : MonoBehaviour
 
             for (int i = 0; i < colorLegend.Length; i++)
             {
-                if (i > 2)
+                if (i == 3)
                 {
                     colorLegend[i].color = internalColors[1];
+                }
+                else if (i == 4)
+                {
+                    colorLegend[i].color = checkTypeColors[3];
                 }
                 else
                 {

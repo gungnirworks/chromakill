@@ -114,6 +114,7 @@ namespace PInputsBase
                                                 //      0 == press
                                                 //      1 == hold
                                                 //      2 == release
+                                                //      3 == logged for the buffer
         public bool Easy { get; set; }       // was this button held for easy input?
         public int Elapsed { get; set; }
 
@@ -167,11 +168,11 @@ namespace PInputsBase
                         Elements.Remove(Elements[i]);
                         elementRemoved = true;
                     }
-                    else if (Elements[i].Elapsed > UM.uValues.bufferWindow &&
+                    else if (Elements[i].Elapsed > UM.uValues.releaseDuration &&
                         Elements[i].CheckType == 2)
                     {
                         // time out release elements if they aren't held
-                        Elements.Remove(Elements[i]);
+                        Elements[i].CheckType = 3;
                         elementRemoved = true;
                     }
                     else if (Elements[i].Elapsed > UM.uValues.easyInput &&
@@ -179,6 +180,13 @@ namespace PInputsBase
                     {
                         // hold is only removed when the button release is added
                         Elements[i].Easy = false;
+                    }
+                    else if (Elements[i].Elapsed > UM.uValues.bufferWindow &&
+                        Elements[i].CheckType == 3)
+                    {
+                        // if the logged button times out
+                        Elements.Remove(Elements[i]);
+                        elementRemoved = true;
                     }
 
                     if (elementRemoved)
@@ -212,7 +220,7 @@ namespace PInputsBase
         public void Add(BufferElement element)
         {
             bool inputAlreadyExists = false;
-            Debug.Log("Checking: " + element.ButtonPress.ToString() + " with checkType " + element.CheckType.ToString() + " for the input buffer.");
+            //Debug.Log("Checking: " + element.ButtonPress.ToString() + " with checkType " + element.CheckType.ToString() + " for the input buffer.");
 
             for (int i = 0; i < Elements.Count; i++)
             {
@@ -224,7 +232,7 @@ namespace PInputsBase
                     if (Elements[i].CheckType == 1 && element.CheckType == 1)
                     {
                         // the held button is already there.
-                        Debug.Log("Held button " + element.ButtonPress.ToString() + " already exists in the buffer.");
+                        //Debug.Log("Held button " + element.ButtonPress.ToString() + " already exists in the buffer.");
                         inputAlreadyExists = true;
                     }
                     else
@@ -241,7 +249,7 @@ namespace PInputsBase
             if (inputAlreadyExists) return;
 
             Elements.Add(element);
-            Debug.Log("Adding: " + element.ButtonPress.ToString() + " with checkType " + element.CheckType.ToString() + " to input buffer.");
+            //Debug.Log("Adding: " + element.ButtonPress.ToString() + " with checkType " + element.CheckType.ToString() + " to input buffer.");
 
             switch (element.CheckType)
             {

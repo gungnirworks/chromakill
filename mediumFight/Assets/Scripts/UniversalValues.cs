@@ -14,10 +14,11 @@ public class UniversalValues : MonoBehaviour
     // values related to universal mechanics.
 
     [Header("Inputs")]
-    public int bufferWindow = 8; // how long an input stays in the buffer before it's acted on
+    public int bufferWindow = 8; // how long an input stays in the buffer
     public int easyInput = 5;   // how long you can you hold a button for it to be added to the buffer window at the
                                 // earliest possible timing
     public int pressDuration = 5; // how long a button press stays in the window
+    public int releaseDuration = 5; // how long a button release press stays in the window
 
     // Between these two, the value of (bufferWindow + easyInput) should give players a pretty wide margin
     // of input leniency.

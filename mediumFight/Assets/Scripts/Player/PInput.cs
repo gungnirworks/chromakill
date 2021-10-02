@@ -170,7 +170,7 @@ public class PInput : PlayerInputsBase
             if (inputFound) // if true
             {
                 ReportButtonPress(inputBuffer.Elements[i]);
-                inputBuffer.Elements.RemoveAt(i);
+                inputBuffer.Elements[i].CheckType = 3; // change the button type to be logged
                 return inputFound; // return true
             }
         }
