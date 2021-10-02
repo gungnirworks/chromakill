@@ -118,7 +118,7 @@ public class DebugInputBuffer : MonoBehaviour
         {
             //Vector3 newOffset = new Vector3(offset.position.x + xOffsetAmount * i, offset.position.y, offset.position.z);
             GameObject newElement = Instantiate(bufferElementPrefab, offset);
-            newElement.transform.position = new Vector3(offset.position.x + xOffsetAmount * i, offset.position.y, offset.position.z);
+            newElement.transform.position = new Vector3(offset.position.x + ( Screen.width * xOffsetAmount * i), offset.position.y, offset.position.z);
             bufferElements.Add(newElement);
 
             DebugBufferElement bufferElement = newElement.GetComponent<DebugBufferElement>();

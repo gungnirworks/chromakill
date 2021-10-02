@@ -27,26 +27,6 @@ public class Camera2P : MonoBehaviour
 
     private DebugScreenSpace debugSS;
 
-
-    /*
-     * Everything here sucks, but it's saved for posterity. I'm not using this shit
-     * 
-     * public float camLerpMagnitude = 5;
-    public float camExtraLerp = 1;
-    public float camExtraLerpMultiplicative = 10;
-    public float lookLerpMagnitude = 5;
-
-    public float camAnchorDefaultDistance = 2.25f;
-    public float camAnchorOffset = 0f;
-    public float camAnchorAdjustSpeed = 0.1f;
-
-    public float bigXRatio = 0.8f;
-    public float bigYRatio = 0.72f;
-    public float smallXRatio = 0.7f;
-    public float smallYRatio = 0.55f;*/
-
-    //public Transform[] targets;
-
     private void Start()
     {
         FindDebugDisplay();
@@ -91,48 +71,6 @@ public class Camera2P : MonoBehaviour
                 Camera.main.WorldToScreenPoint(pLookTarget[i].position).y);
             WriteScreenSpace(i, tempPos, screenPos[i]);
         }
-
-        // =============================== Everything here sucks, but it's saved for posterity. I'm not using this shit =======================================================
-        /*
-                for (int i = 0; i < screenPos.Length; i++)
-                {
-                    float xCompare = Mathf.Abs(screenPos[i].x - Screen.width) / Screen.width;
-                    float yCompare = Mathf.Abs(screenPos[i].y - Screen.height) / Screen.height;
-                    if ((xCompare > bigXRatio || xCompare < 1-bigXRatio ) ||
-                        (yCompare > bigYRatio || yCompare < 1-bigYRatio))
-                    {
-                        // if characters are close to the edge
-                        camAnchorOffset += (
-                            Mathf.Clamp(camAnchorAdjustSpeed - Vector3.Distance(pLookTarget[0].position, pLookTarget[1].position), 0.1f, camAnchorAdjustSpeed * 0.99f)) * Time.deltaTime;
-                        camExtraLerp = camExtraLerpMultiplicative * Vector3.Distance(pLookTarget[0].position, pLookTarget[1].position);
-                        shrinkOK = false;
-                        break;
-                    }
-                }
-
-                if (shrinkOK)
-                {
-                    camExtraLerp = 1;
-                    for (int i = 0; i < screenPos.Length; i++)
-                    {
-                        float xCompare = Mathf.Abs(screenPos[i].x - Screen.width) / Screen.width;
-                        float yCompare = Mathf.Abs(screenPos[i].y - Screen.height) / Screen.height;
-                        if ((xCompare < smallXRatio && xCompare > 1-smallXRatio) &&
-                            (yCompare < smallYRatio && yCompare > 1-smallYRatio))
-                        {
-                            // if character are getting closer together
-                            camAnchorOffset = Mathf.Clamp(camAnchorOffset - (camAnchorAdjustSpeed * Time.deltaTime / 2), 0f, 999999f);
-                            break;
-                        }
-                    }
-                }
-
-                Vector3 newCamAnchorPosition = camAnchor.localPosition;
-                newCamAnchorPosition.z = -camAnchorDefaultDistance - camAnchorOffset;
-                camAnchor.localPosition = newCamAnchorPosition;
-                //Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, camAnchor.position, Time.deltaTime * camLerpMagnitude * camExtraLerp);
-        */
-
 
         Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, camAnchor.position, 1);
         Vector3 lookTarget = Vector3.Lerp(pLookTarget[0].position, pLookTarget[1].position, 0.5f);
