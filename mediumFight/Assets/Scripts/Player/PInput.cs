@@ -193,7 +193,7 @@ public class PInput : PlayerInputsBase
 
         if (rewiredPlayer.GetButtonDown("Jump")) // press
         {
-            Debug.Log("Jumping");
+            //Debug.Log("Jumping");
             inputBuffer.Add(new BufferElement(0, 0));
         }
 
