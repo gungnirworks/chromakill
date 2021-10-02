@@ -164,15 +164,16 @@ namespace PInputsBase
                     if (Elements[i].Elapsed > UM.uValues.pressDuration &&
                         Elements[i].CheckType == 0)
                     {
-                        // time out press elements
-                        Elements.Remove(Elements[i]);
+                        // time out press elements into logged state
+                        Elements[i].CheckType = 3;
                         elementRemoved = true;
                     }
                     else if (Elements[i].Elapsed > UM.uValues.releaseDuration &&
                         Elements[i].CheckType == 2)
                     {
-                        // time out release elements if they aren't held
-                        Elements[i].CheckType = 3;
+                        // time out release elements
+                        Elements.Remove(Elements[i]);
+                        //Elements[i].CheckType = 3;
                         elementRemoved = true;
                     }
                     else if (Elements[i].Elapsed > UM.uValues.easyInput &&
@@ -234,7 +235,14 @@ namespace PInputsBase
                         // the held button is already there.
                         //Debug.Log("Held button " + element.ButtonPress.ToString() + " already exists in the buffer.");
                         inputAlreadyExists = true;
-                    }
+                    }/*
+                    else if (Elements[i].CheckType == 0 && element.CheckType == 1)
+                    {
+                        // there is a press in the input log. change it to hold.
+                        Elements[i].CheckType = 1;
+                        Elements[i].Easy = true;
+                        inputAlreadyExists = true;
+                    }*/
                     else
                     {
                         if (Elements[i].Elapsed < 1)
@@ -266,9 +274,11 @@ namespace PInputsBase
                         for (int i = 0; i < Elements.Count; i++)
                         {
                             if (Elements[i].ButtonPress == element.ButtonPress &&
-                                Elements[i].CheckType == 1) // if the button is being held, remove it because it's been released
+                                Elements[i].CheckType == 1) // if the button is being held, change it to logged
                             {
                                 Elements.RemoveAt(i);
+                                //Elements[i].Easy = false;
+                                //Elements[i].CheckType = 3;
                                 break;
                             }
                         }
