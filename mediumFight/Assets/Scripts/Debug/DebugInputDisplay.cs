@@ -28,6 +28,11 @@ public class DebugInputDisplay : MonoBehaviour
     private void Update()
     {
         UpdateInputs();
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            debugOn = !debugOn;
+        }
     }
 
     private void UpdateInputs()

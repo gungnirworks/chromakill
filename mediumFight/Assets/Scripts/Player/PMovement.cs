@@ -91,9 +91,10 @@ public class PMovement : PlayerInputsBase
 
         bool downcheck = Physics.Raycast(player.transform.position + yOffset, Vector3.down, out RaycastHit hit,
             0.05f + Mathf.Abs(yVelocityCheckMagnitude));
-
+/*
         Debug.DrawLine(player.transform.position + (Vector3.up * 0.05f),
-            player.transform.position - yOffset + (Vector3.up * yVelocityCheckMagnitude), Color.red, 1f);
+            player.transform.position - yOffset + (Vector3.up * yVelocityCheckMagnitude), Color.red, 1f);*/
+
         if (downcheck)
         {
             if (hit.collider.transform.CompareTag("Stage") &&

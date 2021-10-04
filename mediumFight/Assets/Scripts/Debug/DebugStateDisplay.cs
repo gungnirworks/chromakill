@@ -16,6 +16,8 @@ public class DebugStateDisplay : MonoBehaviour
 
     private void Update()
     {
+        playerState.gameObject.SetActive(inputDisplay.debugOn);
+
         if (inputDisplay.debugOn)
         {
             playerState.text = "Player " + inputDisplay.TrackingPlayer.ToString() + " airborne state: " +

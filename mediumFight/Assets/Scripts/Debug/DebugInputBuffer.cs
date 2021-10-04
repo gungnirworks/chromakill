@@ -73,6 +73,8 @@ public class DebugInputBuffer : MonoBehaviour
         if (!inputDisplay.debugOn)
         {
             bufferTitle.gameObject.SetActive(false);
+            offset.gameObject.SetActive(false);
+            return;
         }
         else
         {
@@ -83,6 +85,7 @@ public class DebugInputBuffer : MonoBehaviour
             }
 
             bufferTitle.gameObject.SetActive(true);
+            offset.gameObject.SetActive(true);
             bufferTitle.text = "Input Buffer: Player " + inputDisplay.TrackingPlayer.ToString();
 
             for (int i = 0; i < colorLegend.Length; i++)

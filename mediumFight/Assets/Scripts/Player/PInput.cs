@@ -177,7 +177,8 @@ public class PInput : PlayerInputsBase
             else
             {
                 // if we're looking for a press, we need to also check if easy input was used
-                if (inputBuffer.Elements[i].CheckType == 0 || inputBuffer.Elements[i].Easy)
+                if (inputBuffer.Elements[i].ButtonPress == button && 
+                    (inputBuffer.Elements[i].CheckType == 0 || inputBuffer.Elements[i].Easy))
                 {
                     inputFound = true;
                 }
@@ -196,7 +197,7 @@ public class PInput : PlayerInputsBase
     protected void ReportButtonPress(BufferElement button)
     {
         // report the button that was pressed. this will be useful for debug purposes
-        // Debug.Log("CheckInputBuffer found button input: " + button.ButtonPress + " of type: " + button.CheckType);
+        //Debug.Log("CheckInputBuffer found button input: " + button.ButtonPress + " of type: " + button.CheckType);
     }
 
     protected void UpdateInputBuffer()
