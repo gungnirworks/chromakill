@@ -35,4 +35,5 @@ public class UniversalValues : MonoBehaviour
 
     [Header("Aerial")]
     public int minimumLaunchTime = 10; // This value is number of FixedUpdate steps.
+    public float airMovementScaling = 0.5f; // How much your movement input is scaled in the air.
 }

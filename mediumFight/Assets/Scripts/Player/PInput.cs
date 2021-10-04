@@ -4,6 +4,7 @@ using UnityEngine;
 using Rewired;
 using PInputsBase;
 
+[RequireComponent(typeof(PPlayer))]
 public class PInput : PlayerInputsBase
 {
     // This is the script used to handle all player input.
@@ -30,6 +31,21 @@ public class PInput : PlayerInputsBase
 
 
     public InputBuffer inputBuffer;
+
+    public bool MenuControl { get; set; } = false; // a bool to determine if you're controlling a menu or not.
+
+    public bool ActionControlOK()
+    {
+        // This bool reports whether it's okay for the player to have control
+        // of the character in action game mode, as opposed to in a menu or whatever.
+        // This has nothing to do with the different player states that can determine
+        // whether or not you currently have control of your character (for example,
+        // hitstun, or if you're animation locked after you commit to an attack).
+        if (GameController.instance.CinematicOn ||
+            MenuControl)
+            return false;
+        return true;
+    }
 
     protected override void CustomStart()
     {
@@ -180,6 +196,7 @@ public class PInput : PlayerInputsBase
     protected void ReportButtonPress(BufferElement button)
     {
         // report the button that was pressed. this will be useful for debug purposes
+        // Debug.Log("CheckInputBuffer found button input: " + button.ButtonPress + " of type: " + button.CheckType);
     }
 
     protected void UpdateInputBuffer()

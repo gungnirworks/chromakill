@@ -10,12 +10,7 @@ namespace ActionMech
         {
             // A NegativeState is any state that will generally
             // prevent the player from using an input to take action.
-            // This refers to hitstun, blockstun, and even the
-            // input-lockout portion of an attack animation that the
-            // player activates.
-            // This works because all of these states are mutually
-            // exclusive: You cannot be in blockstun AND hitstun,
-            // you cannot bee in blockstun while attacking, and so on.
+            // This refers to hitstun and blockstun.
 
             public int Frames { get; set; }
             // How long will this NegativeState last?
@@ -67,7 +62,6 @@ namespace ActionMech
             }
 
             // on launch, attack levels no longer matter for hitstun.
-
             public int WallBounce { get; set; }
             public int FloorBounce { get; set; }
 
@@ -81,14 +75,10 @@ namespace ActionMech
             }
         }
 
-        public class AttackLock : NegativeState
-        {
-
-        }
-
         public class Hitstop
         {
-            public int frames;
+            public int Frames { get; set; }
+            public int Elapsed { get; set; }
         }
     }
 }

@@ -16,7 +16,7 @@ namespace PInputsBase
         protected PPlayer player;
         protected PInput pInput;
         protected PMovement pMovement;
-        protected PAttacks pAttacks;
+        protected PActions pActions;
         protected PAnim pAnim;
         protected UniversalMechanics uMech;
 
@@ -58,12 +58,12 @@ namespace PInputsBase
             }
             pMovement = player.pMovement;
 
-            if (player.pAttacks == null)
+            if (player.pActions == null)
             {
                 Debug.Log(gameObject.ToString() + ": " + this.ToString() + " could not find PAttacks component.");
                 return false;
             }
-            pAttacks = player.pAttacks;
+            pActions = player.pActions;
 
             if (player.pAnim == null)
             {

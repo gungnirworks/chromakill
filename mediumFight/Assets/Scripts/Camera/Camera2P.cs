@@ -6,13 +6,19 @@ using UnityEngine.UI;
 public class Camera2P : MonoBehaviour
 {
     // This is a 2P camera rig designed to track two individual targets on the screen at once.
+    // This includes a single player camera to switch to.
 
     public bool debugOn = true;
 
+    public bool cam2p = true;
+
     public float centerLerpMagnitude = 5;
+    public float camLerpMagnitude = 2;
 
     public Transform[] pTransform;
     public Transform[] pLookTarget;
+
+    private Vector3 lastLookTarget;
 
     private Text[] posText;
 
@@ -45,6 +51,11 @@ public class Camera2P : MonoBehaviour
         AdjustPosition();
         TrackScreenSpace();
         LerpCamera();
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            cam2p = !cam2p;
+        }
     }
 
     private void FixedUpdate()
@@ -53,15 +64,29 @@ public class Camera2P : MonoBehaviour
 
     void AdjustPosition()
     {
-        Vector3 midPoint = Vector3.Lerp(pTransform[0].position, pTransform[1].position, 0.5f);
-        rigAnchor.position = Vector3.Lerp(rigAnchor.position, midPoint, Time.deltaTime * centerLerpMagnitude);
+        if (cam2p)
+        {
+            Vector3 midPoint = Vector3.Lerp(pTransform[0].position, pTransform[1].position, 0.5f);
+            rigAnchor.position = Vector3.Lerp(rigAnchor.position, midPoint, Time.deltaTime * centerLerpMagnitude);
+        }
+        else
+        {
+            rigAnchor.position = Vector3.Lerp(rigAnchor.position, pTransform[0].position, Time.deltaTime * centerLerpMagnitude);
+        }
     }
 
     void LerpCamera()
     {
+        float lookside = 0.5f;
+
+        if (!cam2p)
+        {
+            // single player cam here:
+            lookside = 0;
+        }
+
         Vector2 tempPos;
         Vector2[] screenPos = new Vector2[2];
-        //bool shrinkOK = true;
 
         for (int i = 0; i < pLookTarget.Length; i++)
         {
@@ -72,9 +97,14 @@ public class Camera2P : MonoBehaviour
             WriteScreenSpace(i, tempPos, screenPos[i]);
         }
 
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, camAnchor.position, 1);
-        Vector3 lookTarget = Vector3.Lerp(pLookTarget[0].position, pLookTarget[1].position, 0.5f);
-        Camera.main.transform.LookAt(lookTarget);
+        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, camAnchor.position, Time.deltaTime * camLerpMagnitude);
+        Vector3 lookTarget = Vector3.Lerp(pLookTarget[0].position, pLookTarget[1].position, lookside);
+
+        // Shit sucks:
+        //Camera.main.transform.LookAt(lookTarget);
+        //Camera.main.transform.rotation = Quaternion.RotateTowards(Camera.main.transform.rotation, Quaternion.LookRotation(lookTarget, Vector3.up), Time.deltaTime * camLerpMagnitude);
+
+        lastLookTarget = lookTarget;
     }
 
     void TrackScreenSpace()

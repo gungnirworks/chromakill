@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using ActionMech;
 
+[RequireComponent(typeof(PInput))]
+[RequireComponent(typeof(PMovement))]
+[RequireComponent(typeof(PActions))]
+[RequireComponent(typeof(PAnim))]
+[RequireComponent(typeof(Rigidbody))]
 public class PPlayer : ActionMechanics
 {
     // This is the core player class that consolidates all the scripts
@@ -10,13 +15,24 @@ public class PPlayer : ActionMechanics
 
     public int PlayerNumber { get; set; }
 
-    public PInput pInput;
-    public PMovement pMovement;
-    public PAttacks pAttacks;
-    public PAnim pAnim;
+    [HideInInspector] public PInput pInput;
+    [HideInInspector] public PMovement pMovement;
+    [HideInInspector] public PActions pActions;
+    [HideInInspector] public PAnim pAnim;
+
+    public Rigidbody RB { get; set; }
 
     public NegativeState NegState { get; set; }
     public Hitstop HStop { get; set; }
+
+    private void Awake()
+    {
+        pInput = GetComponent<PInput>();
+        pMovement = GetComponent<PMovement>();
+        pActions = GetComponent<PActions>();
+        pAnim = GetComponent<PAnim>();
+        RB = GetComponent<Rigidbody>();
+    }
 
     public void ClearNegative()
     {
@@ -32,6 +48,9 @@ public class PPlayer : ActionMechanics
     public void ResetState()
     {
         NegState = null;
+        pMovement.ResetLaunch();
+        pAnim.ResetAnim();
+        pActions.ResetActions();
         StopAllCoroutines();
     }
 
@@ -51,6 +70,32 @@ public class PPlayer : ActionMechanics
     {
         if (hitstun.Launch)
         {
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.tag == "Stage" && collision.gameObject.GetComponent<StageCheck>() != null)
+        {
+            StageCheck sc = collision.gameObject.GetComponent<StageCheck>();
+
+            if (sc.ground)  // if the stage is ground,
+            {
+                //Debug.Log("Player " + PlayerNumber.ToString() + " currently colliding with ground.");
+                if (RB.velocity.y <= 0)
+                {
+                    // This is one of two methods of checking for ground collision.
+                    // I may remove this method of ground checking later, depending on
+                    // how it plays with platforming.
+
+                    // See PMovement for the raycast method.
+                    pMovement.Airborne = false;
+                }
+            }
+            else
+            {               // if the stage is not ground,
+                
+            }
         }
     }
 }
