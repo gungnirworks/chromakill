@@ -28,6 +28,8 @@ public class UniversalValues : MonoBehaviour
     [Header("Attack Levels")]
     public int[] blockStun;
     public int[] hitStun;
+    public int[] hitStopOnHit;
+    public int[] hitStopOnBlock;
 
     [Header("Attack Pushback")]
     public float defaultBlockPush = 1;

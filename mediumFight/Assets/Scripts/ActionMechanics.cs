@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace ActionMech
 {
@@ -80,5 +81,28 @@ namespace ActionMech
             public int Frames { get; set; }
             public int Elapsed { get; set; }
         }
+    }
+
+    // =========================================================[[ ATTACKS ]]=============================
+    [Serializable]
+    public class Attack
+    {
+        // This is a class designed just to hold the data for any attack.
+
+        //public string attackName;
+        public string animParameter;
+
+        public int attackLevel = 0;
+
+        public AttackPhase startup;
+        public AttackPhase active;
+        public AttackPhase recovery;
+    }
+
+    [Serializable]
+    public class AttackPhase
+    {
+        public int frames = 5;
+        public Vector3 velocity = Vector3.forward;
     }
 }

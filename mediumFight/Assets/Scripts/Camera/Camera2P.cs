@@ -104,6 +104,7 @@ public class Camera2P : MonoBehaviour
         //Camera.main.transform.LookAt(lookTarget);
         //Camera.main.transform.rotation = Quaternion.RotateTowards(Camera.main.transform.rotation, Quaternion.LookRotation(lookTarget, Vector3.up), Time.deltaTime * camLerpMagnitude);
 
+        Quaternion.RotateTowards(Camera.main.transform.rotation, camAnchor.transform.rotation, Time.deltaTime * camLerpMagnitude);
         lastLookTarget = lookTarget;
     }
 
@@ -139,7 +140,8 @@ public class Camera2P : MonoBehaviour
 
         screenDebugDisplay.text =
             "Height: " + Screen.height.ToString() +
-            "\nWidth: " + Screen.width.ToString();
+            "\nWidth: " + Screen.width.ToString() + 
+            "\n" + (1f / Time.deltaTime).ToString() + " FPS";
 
         posText[i].text = "WorldToScreenPoint: " + sP.ToString() +
             "\nxCompare: " + (Mathf.Abs(tP.x - Screen.width) / Screen.width).ToString() +
