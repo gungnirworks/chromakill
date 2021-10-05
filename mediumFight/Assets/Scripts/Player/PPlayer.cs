@@ -85,11 +85,12 @@ public class PPlayer : ActionMechanics
                 if (RB.velocity.y <= 0)
                 {
                     // This is one of two methods of checking for ground collision.
-                    // I may remove this method of ground checking later, depending on
-                    // how it plays with platforming.
+                    // This method can cause issues if you touch a block tagged
+                    // as ground on its side. Right now there's not much reason
+                    // to use this method, but it's here.
 
                     // See PMovement for the raycast method.
-                    pMovement.Airborne = false;
+                    // pMovement.Airborne = false;
                 }
             }
             else
