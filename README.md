@@ -1,5 +1,5 @@
 # chromakill
-Chromakill Mechanics Rebuild 00
+Chromakill Mechanics Rebuild 00: This repository is scripts only.
 
 This is a ground-up rebuild of my Chromakill project to serve as a more solid foundation on top of which to build an action game.
 
