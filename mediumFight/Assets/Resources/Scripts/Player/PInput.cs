@@ -50,6 +50,7 @@ public class PInput : PlayerInputsBase
     public bool MenuControl { get; set; } = false; // a bool to determine if you're controlling a menu or not.
     protected bool gatheredInputDuringFrame = false;
     protected bool alreadySetListener = false;
+    protected int lastUsedFrameInt = -1;
     #endregion
 
     #region Basic Methods and Setup
@@ -138,6 +139,29 @@ public class PInput : PlayerInputsBase
     //========================================[[         CYCLE          ]]===================================================
 
     #region Cycle
+    private bool CheckAlreadyGatheredInput()
+    {
+        if (ActionThreadSync.Instance == null)
+        {
+            Debug.Log("Action Thread could not be found.");
+            return true;
+        }
+
+        if (!gatheredInputDuringFrame)
+        {
+            return false;
+        }
+        else if (gatheredInputDuringFrame &&
+            lastUsedFrameInt != ActionThreadSync.Instance.FixedFrameCounter)
+        {
+            lastUsedFrameInt = ActionThreadSync.Instance.FixedFrameCounter;
+            return false;
+        }
+
+        lastUsedFrameInt = ActionThreadSync.Instance.FixedFrameCounter;
+        return true;
+    }
+
     private void FixedUpdate()
     {
         /// FixedUpdate happens first, so in the interest of the fastest possible
@@ -176,7 +200,7 @@ public class PInput : PlayerInputsBase
     #region Input Handling
     protected virtual void InputLoop()
     {
-        if (gatheredInputDuringFrame) return;
+        if (CheckAlreadyGatheredInput()) return;
 
         CheckRewiredPlayer();
         GetStickMovement(SetMainCamera());

@@ -16,6 +16,18 @@ public class ActionThreadSync : MonoBehaviour
     }
     #endregion
 
+    #region Tracking
+    public int FixedFrameCounter { get; private set; }
+    private void UpdateFixedFrameCounter()
+    {
+        FixedFrameCounter++;
+        if (FixedFrameCounter >= 5)
+        {
+            FixedFrameCounter = 0;
+        }
+    }
+    #endregion
+
     //========================================[[         EVENTS         ]]===================================================
 
     #region Events
@@ -37,6 +49,7 @@ public class ActionThreadSync : MonoBehaviour
     #region Cycle
     private void FixedUpdate()
     {
+        UpdateFixedFrameCounter();
         SetListeners();
 
         /// FixedUpdate happens first, so in the interest of the fastest possible
