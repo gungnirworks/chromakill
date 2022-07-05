@@ -24,6 +24,8 @@ public class PActions : PlayerInputsBase
     public Attack[] QAtkChain;
     public Attack[] SAtkChain;
 
+    protected bool alreadySetListener = false;
+
     private void FixedAction()
     {
         if (player.HStop != null)
@@ -45,7 +47,31 @@ public class PActions : PlayerInputsBase
     // ===================================================================[[ LISTENERS ]]========================================================
 
     #region Listeners
+    public void SetListeners()
+    {
+        if (alreadySetListener) return;
 
+        if (ActionThreadSync.Instance == null)
+        {
+            Debug.Log("Action Thread could not be found.");
+            return;
+        }
+
+        ActionThreadSync.Instance.onFixedAction += FixedAction;
+        alreadySetListener = true;
+    }
+
+    public void RemoveListeners()
+    {
+        if (ActionThreadSync.Instance == null)
+        {
+            Debug.Log("Action Thread could not be found.");
+            return;
+        }
+
+        ActionThreadSync.Instance.onFixedAction -= FixedAction;
+        alreadySetListener = false;
+    }
     #endregion
 
     // ===================================================================[[   CHECKS  ]]========================================================

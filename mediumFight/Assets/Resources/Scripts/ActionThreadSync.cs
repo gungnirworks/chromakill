@@ -28,7 +28,7 @@ public class ActionThreadSync : MonoBehaviour
     public event Action onFixedAction;
     public void FixedAction()
     {
-        //onFixedAction.Invoke();
+        onFixedAction.Invoke();
     }
     #endregion
 
@@ -88,6 +88,7 @@ public class ActionThreadSync : MonoBehaviour
         foreach (GameObject obj in GameController.Instance.Players)
         {
             obj.GetComponentInChildren<PInput>().SetListeners();
+            obj.GetComponentInChildren<PActions>().SetListeners();
         }
     }
 
