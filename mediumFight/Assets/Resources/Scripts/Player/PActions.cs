@@ -24,7 +24,7 @@ public class PActions : PlayerInputsBase
     public Attack[] QAtkChain;
     public Attack[] SAtkChain;
 
-    private void FixedUpdate()
+    private void FixedAction()
     {
         if (player.HStop != null)
         {
@@ -42,7 +42,15 @@ public class PActions : PlayerInputsBase
         pMovement.Move();
         ButtonChecks();
     }
+    // ===================================================================[[ LISTENERS ]]========================================================
 
+    #region Listeners
+
+    #endregion
+
+    // ===================================================================[[   CHECKS  ]]========================================================
+
+    #region Checks
     public void ResetActions()
     {
         InAction = true;
@@ -72,7 +80,7 @@ public class PActions : PlayerInputsBase
             else if (pInput.CheckInputBuffer(1, 0)) //Check QAtk:
             {
                 DisplayDebugButtonCheck("QAtk");
-                //pAnim.ResetAnim();
+                pAnim.ResetAnim();
             }
             else if (pInput.CheckInputBuffer(2, 0)) //Check SAtk
             {
@@ -99,9 +107,11 @@ public class PActions : PlayerInputsBase
         // ================================= airborne button checks
         if (!pMovement.Airborne) return; // exit out if not airborne
     }
+    #endregion
 
-    // ===================================================================[[ ATTACKS ]]==========================
+    // ===================================================================[[  ATTACKS  ]]========================================================
 
+    #region Attacks
     public void StartChainAttack(Attack[] chain, int buttonPress, int chainStart = 0)
     {
         if (chainStart > chain.Length - 1)
@@ -115,4 +125,5 @@ public class PActions : PlayerInputsBase
     {
         yield return null;
     }
+    #endregion
 }

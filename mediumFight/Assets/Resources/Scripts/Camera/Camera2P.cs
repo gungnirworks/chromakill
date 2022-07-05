@@ -8,6 +8,8 @@ public class Camera2P : MonoBehaviour
     // This is a 2P camera rig designed to track two individual targets on the screen at once.
     // This includes a single player camera to switch to.
 
+    public Camera cam;
+
     public bool debugOn = true;
 
     public bool cam2p = true;
@@ -92,19 +94,19 @@ public class Camera2P : MonoBehaviour
         {
             tempPos = new Vector2(posText[i].transform.parent.position.x, posText[i].transform.parent.position.y);
             screenPos[i] = new Vector2(
-                Camera.main.WorldToScreenPoint(pLookTarget[i].position).x,
-                Camera.main.WorldToScreenPoint(pLookTarget[i].position).y);
+                cam.WorldToScreenPoint(pLookTarget[i].position).x,
+                cam.WorldToScreenPoint(pLookTarget[i].position).y);
             WriteScreenSpace(i, tempPos, screenPos[i]);
         }
 
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, camAnchor.position, Time.deltaTime * camLerpMagnitude);
+        cam.transform.position = Vector3.Lerp(cam.transform.position, camAnchor.position, Time.deltaTime * camLerpMagnitude);
         Vector3 lookTarget = Vector3.Lerp(pLookTarget[0].position, pLookTarget[1].position, lookside);
 
         // Shit sucks:
         //Camera.main.transform.LookAt(lookTarget);
         //Camera.main.transform.rotation = Quaternion.RotateTowards(Camera.main.transform.rotation, Quaternion.LookRotation(lookTarget, Vector3.up), Time.deltaTime * camLerpMagnitude);
 
-        Quaternion.RotateTowards(Camera.main.transform.rotation, camAnchor.transform.rotation, Time.deltaTime * camLerpMagnitude);
+        Quaternion.RotateTowards(cam.transform.rotation, camAnchor.transform.rotation, Time.deltaTime * camLerpMagnitude);
         lastLookTarget = lookTarget;
     }
 
@@ -112,7 +114,7 @@ public class Camera2P : MonoBehaviour
     {
         for (int i = 0; i < pTransform.Length; i++)
         {
-            posText[i].transform.parent.position = Camera.main.WorldToScreenPoint(pLookTarget[i].position);
+            posText[i].transform.parent.position = cam.WorldToScreenPoint(pLookTarget[i].position);
         }
     }
 

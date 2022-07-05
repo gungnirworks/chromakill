@@ -105,7 +105,7 @@ public class DebugInputBuffer : MonoBehaviour
             }
 
             // populate the buffer
-            inputBuffer = inputDisplay.Player(inputDisplay.TrackingPlayer).pInput.inputBuffer;
+            inputBuffer = inputDisplay.Player(inputDisplay.TrackingPlayer).pInput.Buffer;
         }
 
         // draw the buffer

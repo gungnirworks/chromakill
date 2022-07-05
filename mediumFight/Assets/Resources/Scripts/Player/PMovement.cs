@@ -19,6 +19,7 @@ public class PMovement : PlayerInputsBase
     private Launch launch;
     private Vector3 airMovement;
 
+    //private bool airborne;
     public bool Airborne { get; set; }
 
     private void FixedUpdate()

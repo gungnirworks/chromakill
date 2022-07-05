@@ -28,6 +28,7 @@ namespace PInputsBase
             if (!FetchScripts())
             {
                 Debug.Log(gameObject.ToString() + ": " + this.ToString() + " could not be fully initialized due to missing components.");
+                return;
             }
 
             // Run custom start code, if any

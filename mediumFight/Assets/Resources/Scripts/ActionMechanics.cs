@@ -112,6 +112,10 @@ namespace ActionMech
     }
 
     // =========================================================[[ ATTACKS (ported from previous version) ]]=============================
+
+    #region Previous Version Attacks
+/*
+    #region CopyPasted
     [System.Serializable]
     public class Stance
     {
@@ -217,7 +221,6 @@ namespace ActionMech
 
     }
 
-
     // [System.Serializable]
     public class AttackHitbox
     {
@@ -276,4 +279,7 @@ namespace ActionMech
             hitObj = h;
         }
     }
+    #endregion
+*/
+    #endregion
 }
