@@ -34,12 +34,16 @@ public class ActionThreadSync : MonoBehaviour
     public event Action onGetInput;
     public void GetInput()
     {
+        if (onGetInput == null) return;
+
         onGetInput.Invoke();
     }
 
     public event Action onFixedAction;
     public void FixedAction()
     {
+        if (onFixedAction == null) return;
+
         onFixedAction.Invoke();
     }
     #endregion
