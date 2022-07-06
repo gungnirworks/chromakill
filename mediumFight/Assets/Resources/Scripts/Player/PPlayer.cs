@@ -20,7 +20,7 @@ public class PPlayer : ActionMechanics
     [HideInInspector] public PActions pActions;
     [HideInInspector] public PAnim pAnim;
 
-    public Rigidbody RB { get; set; }
+    public Rigidbody RB { get; private set; }
 
     public NegativeState NegState { get; set; }
     public Hitstop HStop { get; set; }

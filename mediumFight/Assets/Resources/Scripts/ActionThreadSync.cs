@@ -54,7 +54,12 @@ public class ActionThreadSync : MonoBehaviour
 
         /// FixedUpdate happens first, so in the interest of the fastest possible
         /// input gathering, check for inputs here.
-        GetInput();
+        /// ... at least, that WOULD be the case, except for the fact that if your
+        /// framerate is lower than the fixed update rate, rewired's button down
+        /// event can last longer than two or more fixed update cyclces. As a result,
+        /// I have commented this out and will rely only on Update() for input
+        /// fetching from now on.
+        //GetInput();
 
         /// There should be an event here that player actions listen for in order
         /// to trigger actions, in order to enforce order of operations from

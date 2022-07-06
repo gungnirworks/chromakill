@@ -111,7 +111,15 @@ public class PInput : PlayerInputsBase
 
     public void SetListeners()
     {
-        if (alreadySetListener) return;
+        if (alreadySetListener)
+        {
+            //Debug.Log("Already set listener in PInput.");
+            return;
+        }
+        else
+        {
+            //Debug.Log("Listener is being set on PInput...");
+        }
 
         if (ActionThreadSync.Instance == null)
         {
@@ -149,10 +157,11 @@ public class PInput : PlayerInputsBase
 
         if (!gatheredInputDuringFrame)
         {
+            lastUsedFrameInt = ActionThreadSync.Instance.FixedFrameCounter;
             return false;
         }
         else if (gatheredInputDuringFrame &&
-            lastUsedFrameInt != ActionThreadSync.Instance.FixedFrameCounter)
+            Mathf.Abs(lastUsedFrameInt - ActionThreadSync.Instance.FixedFrameCounter) == 1)
         {
             lastUsedFrameInt = ActionThreadSync.Instance.FixedFrameCounter;
             return false;
@@ -206,6 +215,8 @@ public class PInput : PlayerInputsBase
         GetStickMovement(SetMainCamera());
         UpdateInputBuffer();
 
+        //Debug.Log("Input Loop with frame counter: " + ActionThreadSync.Instance.FixedFrameCounter.ToString());
+
         gatheredInputDuringFrame = true;
     }
 
@@ -248,7 +259,7 @@ public class PInput : PlayerInputsBase
     protected void ReportButtonPress(BufferElement button)
     {
         // report the button that was pressed. this will be useful for debug purposes
-        //Debug.Log("CheckInputBuffer found button input: " + button.ButtonPress + " of type: " + button.CheckType);
+        // Debug.Log("CheckInputBuffer found button input: " + button.ButtonPress + " of type: " + button.CheckType);
     }
 
     protected void UpdateInputBuffer()
